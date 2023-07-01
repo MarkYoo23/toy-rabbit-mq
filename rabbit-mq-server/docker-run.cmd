@@ -1,4 +1,4 @@
-rem TODO:(dh) Will be change to docker-compose.yml
+rem TODO:(dh) Will be change to dockerfile with docker-compose.yml
 rem localhost:15672 - 웹 서비스에 접속할 수 있습니다.
 rem 기본 아이디 user / 기본 비밀번호 qwer1234
 rem 기본 vhost rabbitmq_vhost
