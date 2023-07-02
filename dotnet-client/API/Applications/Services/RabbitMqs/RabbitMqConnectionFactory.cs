@@ -1,12 +1,12 @@
 ﻿using RabbitMQ.Client;
 
-namespace API.Applications.Services;
+namespace API.Applications.Services.RabbitMqs;
 
-public class RabbitMqClientFactory
+public class RabbitMqConnectionFactory
 {
     private readonly string _hostName;
 
-    public RabbitMqClientFactory(string hostName)
+    public RabbitMqConnectionFactory(string hostName)
     {
         _hostName = hostName;
     }
@@ -20,6 +20,7 @@ public class RabbitMqClientFactory
             Password = "qwer1234",
             VirtualHost = "rabbitmq_vhost"
         };
+
         return connectionFactory.CreateConnection();
     }
 }

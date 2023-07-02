@@ -8,9 +8,9 @@ namespace API.Presentations.Controllers;
 public class HelloController : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> SendMessage([FromServices] SayHelloService service)
+    public IActionResult SendMessage([FromServices] SayHelloService service)
     {
-        await service.ExecuteAsync();
+        service.Execute();
         return Ok();
     }
 }

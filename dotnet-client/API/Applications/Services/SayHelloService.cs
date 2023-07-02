@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using API.Applications.Services.RabbitMqs;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -7,20 +8,19 @@ namespace API.Applications.Services;
 public class SayHelloService
 {
     private readonly ILogger<SayHelloService> _logger;
-    private readonly RabbitMqClientFactory _rabbitMqClientFactory;
+    private readonly HelloChannelFactory _helloChannelFactory;
 
     public SayHelloService(
         ILogger<SayHelloService> logger,
-        RabbitMqClientFactory rabbitMqClientFactory)
+        HelloChannelFactory helloChannelFactory)
     {
         _logger = logger;
-        _rabbitMqClientFactory = rabbitMqClientFactory;
+        _helloChannelFactory = helloChannelFactory;
     }
 
-    public async Task ExecuteAsync()
+    public void Execute()
     {
-        using var connection = _rabbitMqClientFactory.Create();
-        using var channel = connection.CreateModel();
+        var channel = _helloChannelFactory.Channel;
 
         channel.QueueDeclare(queue: "hello",
             durable: false,
@@ -38,20 +38,5 @@ public class SayHelloService
             body: body);
 
         _logger.LogInformation($"Rabbit MQ : Publish : {message}");
-
-        var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += (model, ea) =>
-        {
-            var body = ea.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-
-            _logger.LogInformation($"Rabbit MQ : Received : {message}");
-        };
-
-        channel.BasicConsume(queue: "hello",
-            autoAck: true,
-            consumer: consumer);
-
-        await Task.Delay(5000);
     }
 }

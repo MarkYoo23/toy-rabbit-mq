@@ -1,5 +1,6 @@
 using System.Text;
 using API.Applications.Services;
+using API.Applications.Services.RabbitMqs;
 using API.Presentations.Extensions;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -32,8 +33,8 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
-    var factory = serviceProvider.GetRequiredService<RabbitMqClientFactory>();
-
+    var receiveHelloService = serviceProvider.GetRequiredService<ReceiveHelloService>();
+    receiveHelloService.Register();
 }
 
 app.Run();
